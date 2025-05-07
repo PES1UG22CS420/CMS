@@ -1,0 +1,170 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+'=====================
+'      PEOPLE IN CRISIS
+'=====================
+class PeopleInCrisis {
+    - name: String
+    - userID: int
+    - location: String
+    - phoneNo: String
+    - description: String
+    - status: String
+    + updateStatus(status: String): void
+    + hasActiveRequest(): boolean
+}
+
+class PeopleInCrisisController {
+    - model: PeopleInCrisis
+    + signUp(data): void
+    + enterHelpRequest(desc: String, location: String): void
+    + trackRequest(): void
+}
+
+class PeopleInCrisisView {
+    + displayHelpRequestStatus(): void
+    + getUserInput(): void
+}
+
+PeopleInCrisisController --> PeopleInCrisis
+PeopleInCrisisView --> PeopleInCrisisController
+
+'=====================
+'      VOLUNTEER
+'=====================
+class Volunteer {
+    - name: String
+    - userID: int
+    - location: String
+    - available: boolean
+    + setAvailability(status: boolean): void
+}
+
+class VolunteerController {
+    - model: Volunteer
+    + signUp(data): void
+    + donate(amount: double): void
+    + helpOnSite(task: String): void
+    + accessHistory(): List
+    + getVolunteerHistory(): List
+}
+
+class VolunteerView {
+    + showAvailableTasks(): void
+    + showDonationForm(): void
+    + getVolunteerInput(): void
+}
+
+VolunteerController --> Volunteer
+VolunteerView --> VolunteerController
+
+'=====================
+'      RELIEF PROVIDER
+'=====================
+class ReliefProvider {
+    - name: String
+    - orgType: String
+    + accessIncidentReports(): List
+    + categorizeRequest(request: HelpRequest): String
+}
+
+class ReliefProviderController {
+    - model: ReliefProvider
+    + signUp(data): void
+    + requestManpower(): void
+    + requestGovtAid(): void
+    + requestAdditionalAid(): void
+    + requestMonetaryService(): void
+}
+
+class ReliefProviderView {
+    + showAidOptions(): void
+    + getReliefProviderInput(): void
+}
+
+ReliefProviderController --> ReliefProvider
+ReliefProviderView --> ReliefProviderController
+
+'=====================
+'      GOVERNMENT AGENCY
+'=====================
+class GovernmentAgency {
+    - agencyName: String
+    + trackSeverity(): void
+    + provisionResources(): void
+    + allocatePersonnel(): void
+    + emergencyBudget(): void
+    + callMilitary(): void
+}
+
+class GovernmentAgencyController {
+    - model: GovernmentAgency
+    + offerAid(): void
+}
+
+class GovernmentAgencyView {
+    + showSeverityReport(): void
+    + getAgencyInput(): void
+}
+
+GovernmentAgencyController --> GovernmentAgency
+GovernmentAgencyView --> GovernmentAgencyController
+
+'=====================
+'      ADMIN
+'=====================
+class Admin {
+    - username: String
+    + verifyHelpRequest(requestID: int): void
+    + manageAccounts(): void
+    + secureSystem(): void
+}
+
+class AdminController {
+    - model: Admin
+    + configureAlertSystem(): void
+    + ensureCommunication(): void
+}
+
+class AdminView {
+    + displayAdminDashboard(): void
+    + getAdminInput(): void
+}
+
+AdminController --> Admin
+AdminView --> AdminController
+
+'=====================
+'      ALERT SYSTEM
+'=====================
+class AlertSystem {
+    - subscribers: List
+    + broadcastAlert(message: String): void
+}
+
+class AlertSystemController {
+    - model: AlertSystem
+    + registerSubscriber(): void
+    + unregisterSubscriber(): void
+    + updateAlert(message: String): void
+}
+
+class AlertSystemView {
+    + displayAlert(message: String): void
+    + getAlertInput(): void
+}
+
+AlertSystemController --> AlertSystem
+AlertSystemView --> AlertSystemController
+
+'=====================
+'      RELATIONSHIPS
+'=====================
+PeopleInCrisis --> Volunteer : requests help >>
+Volunteer --> ReliefProvider : reports situation >>
+ReliefProvider --> GovernmentAgency : requests aid >>
+Admin --> AlertSystem : <<configures>>
+AlertSystem --> PeopleInCrisis : <<notifies>>
+
+@enduml
